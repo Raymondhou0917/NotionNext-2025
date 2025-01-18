@@ -15,7 +15,7 @@ const themes = scanSubdirectories(path.resolve(__dirname, 'themes'))
 const locales = (function () {
   // 根据BLOG_NOTION_PAGE_ID 检查支持多少种语言数据.
   // 支持如下格式配置多个语言的页面id xxx,zh:xxx,en:xxx
-  const langs = [BLOG.LANG.slice(0, 2)]
+  const langs = [BLOG.LANG]
   if (BLOG.NOTION_PAGE_ID.indexOf(',') > 0) {
     const siteIds = BLOG.NOTION_PAGE_ID.split(',')
     for (let index = 0; index < siteIds.length; index++) {
@@ -90,7 +90,7 @@ const nextConfig = {
   i18n: process.env.EXPORT
     ? undefined
     : {
-        defaultLocale: BLOG.LANG.slice(0, 2),
+        defaultLocale: BLOG.LANG,
         // 支持的所有多语言,按需填写即可
         locales
       },
@@ -218,6 +218,14 @@ const nextConfig = {
     { dev, dir, outDir, distDir, buildId }
   ) {
     const pathMap = { ...defaultPathMap }
+    // Remove search-related paths during static export
+    if (process.env.EXPORT) {
+      Object.keys(pathMap).forEach(path => {
+        if (path.includes('/search')) {
+          delete pathMap[path]
+        }
+      })
+    }
     // 刪除搜尋相關的動態路由，因為這些頁面應該在運行時生成
     delete pathMap['/search/[keyword]']
     delete pathMap['/search/[keyword]/page/[page]']

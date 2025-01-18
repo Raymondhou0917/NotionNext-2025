@@ -55,7 +55,7 @@ Git diff:
 
 Generate only the commit message without any explanation."""
 
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that generates git commit messages."},
