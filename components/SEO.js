@@ -257,7 +257,7 @@ const getSEOMeta = (props, router, locale) => {
       }
     case '/404':
       return {
-        title: `${siteInfo?.title} | 页面找不到啦`,
+        title: `${siteInfo?.title} | 頁面找不到啦，更多內容可以到雷蒙的內容主站：https://raymondhouch.com/`,
         image: `${siteInfo?.pageCover}`
       }
     case '/tag':

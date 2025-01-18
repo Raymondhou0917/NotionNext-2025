@@ -50,11 +50,13 @@ COPY --from=builder /app/.next/static ./.next/static
 # 个人仓库把将配置好的.env.local文件放到项目根目录，可自动使用环境变量
 # COPY --from=builder /app/.env.local ./
 
-EXPOSE 3000
-
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry.
 # ENV NEXT_TELEMETRY_DISABLED 1
+
+# 使用環境變數 PORT（部署到 Zeabur 時能自動抓端口），但如果未設置則默認使用 3000（例如可以透過本地 http://localhost:3000 來查看網站的變更）
+EXPOSE 3000
+ENV PORT=3000
 
 CMD ["node", "server.js"]
