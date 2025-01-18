@@ -52,9 +52,8 @@ const SEO = props => {
     url = `${url}/${meta.slug}`
     image = meta.image || '/bg_image.jpg'
   }
-  const TITLE = siteConfig('TITLE')
-  const title = meta?.title || TITLE
-  const description = meta?.description || `${siteInfo?.description}`
+  const TITLE = siteConfig('SITE_TITLE') || '雷蒙三十的社群內容彙整';
+  const description = meta?.description || `${siteConfig('AUTHOR')}的社群內容彙整，AI 自動化工作應用、Notion 教學、一人公司經營和個人生產力秘訣。`;
   const type = meta?.type || 'website'
   const lang = siteConfig('LANG').replace('-', '_') // Facebook OpenGraph 要 zh_CN 這樣的格式才抓得到語言
   const category = meta?.category || KEYWORDS // section 主要是像是 category 這樣的分類，Facebook 用這個來抓連結的分類
@@ -103,7 +102,7 @@ const SEO = props => {
   return (
     <Head>
       <link rel='icon' href={favicon} />
-      <title>{title}</title>
+      <title>{meta?.title || TITLE}</title>
       <meta name='theme-color' content={BACKGROUND_DARK} />
       <meta
         name='viewport'
@@ -123,19 +122,18 @@ const SEO = props => {
           content={SEO_BAIDU_SITE_VERIFICATION}
         />
       )}
+      <meta name='description' content={meta?.description || `${siteConfig('AUTHOR')}的社群內容彙整，AI 自動化工作應用、Notion 教學、一人公司經營和個人生產力秘訣。`} />
       <meta name='keywords' content={keywords} />
-      <meta name='description' content={description} />
+      <meta name='author' content={siteConfig('AUTHOR')} />
+      <meta property='og:title' content={meta?.title || siteConfig('SITE_TITLE')} />
+      <meta property='og:description' content={meta?.description || `${siteConfig('AUTHOR')}的社群內容彙整，AI 自動化工作應用、Notion 教學、一人公司經營和個人生產力秘訣。`} />
+      <meta property='og:site_name' content={siteConfig('SITE_TITLE')} />
       <meta property='og:locale' content={lang} />
-      <meta property='og:title' content={title} />
-      <meta property='og:description' content={description} />
+      <meta property='og:image' content={meta?.image || siteConfig('HOME_BANNER_IMAGE')} />
+      <meta property='og:type' content={meta?.type || 'website'} />
       <meta property='og:url' content={url} />
-      <meta property='og:image' content={image} />
-      <meta property='og:site_name' content={title} />
-      <meta property='og:type' content={type} />
-      <meta name='twitter:card' content='summary_large_image' />
-      <meta name='twitter:description' content={description} />
-      <meta name='twitter:title' content={title} />
-
+      <link rel='canonical' href={`https://raymondhouch.com${router.asPath}`} />
+      <meta name='robots' content='index,follow' />
       <link rel='icon' href={BLOG_FAVICON} />
 
       {COMMENT_WEBMENTION_ENABLE && (
@@ -175,28 +173,30 @@ const SEO = props => {
  * @param {*} props
  * @param {*} router
  */
+const TITLE_SUFFIX = ' | 雷蒙的社群內容彙整';
 const getSEOMeta = (props, router, locale) => {
-  const { post, siteInfo, tag, category, page } = props
-  const keyword = router?.query?.s
-
-  const TITLE = siteConfig('TITLE')
+  const { post, siteInfo, tag, category, page } = props;
+  const IMAGE = siteInfo?.pageCover || '/default-share-image.jpg';
+  const DESCRIPTION =
+  siteInfo?.description ||
+  '探索數位工具、AI 自動化應用和生產力秘訣，這裡是雷蒙三十的社群內容整理站，幫助你聰明工作、好好生活。';
+  const TITLE = siteConfig('SITE_TITLE')
+  const title = TITLE;
   switch (router.route) {
     case '/':
-      return {
-        title: `${siteInfo?.title} | ${siteInfo?.description}`,
-        description: `${siteInfo?.description}`,
-        image: `${siteInfo?.pageCover}`,
-        slug: '',
-        type: 'website'
-      }
-    case '/archive':
-      return {
-        title: `${locale.NAV.ARCHIVE} | ${siteInfo?.title}`,
-        description: `${siteInfo?.description}`,
-        image: `${siteInfo?.pageCover}`,
-        slug: 'archive',
-        type: 'website'
-      }
+      return { 
+        title: TITLE, 
+        description: DESCRIPTION, 
+        image: IMAGE, slug: '', 
+        type: 'website' 
+      };
+      case '/archive':
+        return { 
+          title: `文章歸檔${TITLE_SUFFIX}`,
+          description: '過往社群媒體內容彙整。', 
+          image: IMAGE, 
+          slug: 'archive', 
+          type: 'website' };
     case '/page/[page]':
       return {
         title: `${page} | Page | ${siteInfo?.title}`,
