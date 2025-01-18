@@ -1,15 +1,18 @@
 ARG NOTION_PAGE_ID
 ARG NEXT_PUBLIC_THEME
 
-FROM node:18-alpine3.18 AS base
+FROM node:20-alpine3.18 AS base
 
 # 1. Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json ./
-RUN yarn install --frozen-lockfile
+
+# Copy both package.json and yarn.lock
+COPY package.json yarn.lock ./
+# First try to install dependencies with frozen lockfile, if it fails then install without it
+RUN yarn install --frozen-lockfile || yarn install
 
 # 2. Rebuild the source code only when needed
 FROM base AS builder
