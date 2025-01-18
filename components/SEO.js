@@ -178,10 +178,14 @@ const getSEOMeta = (props, router, locale) => {
   const { post, siteInfo, tag, category, page } = props;
   const IMAGE = siteInfo?.pageCover || '/default-share-image.jpg';
   const DESCRIPTION =
-  siteInfo?.description ||
-  '探索數位工具、AI 自動化應用和生產力秘訣，這裡是雷蒙三十的社群內容整理站，幫助你聰明工作、好好生活。';
+    siteInfo?.description ||
+    '探索數位工具、AI 自動化應用和生產力秘訣，這裡是雷蒙三十的社群內容整理站，幫助你聰明工作、好好生活。';
   const TITLE = siteConfig('SITE_TITLE')
   const title = TITLE;
+
+  // 從 router.query 中獲取 keyword
+  const keyword = router?.query?.keyword || '';
+
   switch (router.route) {
     case '/':
       return { 
@@ -232,19 +236,23 @@ const getSEOMeta = (props, router, locale) => {
       }
     case '/search':
       return {
-        title: `${keyword || ''}${keyword ? ' | ' : ''}${locale.NAV.SEARCH} | ${siteInfo?.title}`,
-        description: `${siteInfo?.description}`,
-        image: `${siteInfo?.pageCover}`,
+        title: `${keyword ? `${keyword} | ` : ''}${locale.NAV.SEARCH}${TITLE_SUFFIX}`,
+        description: keyword 
+          ? `搜尋「${keyword}」的相關文章` 
+          : '搜尋所有文章',
+        image: IMAGE,
         slug: 'search',
         type: 'website'
       }
     case '/search/[keyword]':
     case '/search/[keyword]/page/[page]':
       return {
-        title: `${keyword || ''}${keyword ? ' | ' : ''}${locale.NAV.SEARCH} | ${siteInfo?.title}`,
-        description: TITLE,
-        image: `${siteInfo?.pageCover}`,
-        slug: 'search/' + (keyword || ''),
+        title: `${keyword ? `${keyword} | ` : ''}${locale.NAV.SEARCH}${TITLE_SUFFIX}`,
+        description: keyword 
+          ? `搜尋「${keyword}」的相關文章` 
+          : '搜尋所有文章',
+        image: IMAGE,
+        slug: `search/${keyword || ''}`,
         type: 'website'
       }
     case '/404':
