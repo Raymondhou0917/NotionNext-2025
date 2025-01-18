@@ -55,7 +55,7 @@ COPY --from=builder /app/.next/static ./.next/static
 # Uncomment the following line in case you want to disable telemetry.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-# 使用環境變數 PORT（部署到 Zeabur 時能自動抓端口），但如果未設置則默認使用 3000（例如可以透過本地 http://localhost:3000 來查看網站的變更）
+# 使用環境變數 PORT（部署到 Zeabur 時能自動抓端口），但如果未設置則默認使用 3000（例如可透過本地 http://localhost:3000 來查看網站的變更）
 EXPOSE 3000
 ENV PORT=3000
 
