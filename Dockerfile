@@ -5,14 +5,23 @@ FROM node:20-alpine3.18 AS base
 
 # 1. Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+# Install build dependencies
+RUN apk add --no-cache \
+    libc6-compat \
+    python3 \
+    make \
+    g++ \
+    build-base \
+    cairo-dev \
+    jpeg-dev \
+    pango-dev \
+    giflib-dev
 WORKDIR /app
 
-# Copy both package.json and yarn.lock
-COPY package.json yarn.lock ./
-# First try to install dependencies with frozen lockfile, if it fails then install without it
-RUN yarn install --frozen-lockfile || yarn install
+# Copy package files
+COPY package*.json ./
+# Install dependencies with npm
+RUN npm install --legacy-peer-deps
 
 # 2. Rebuild the source code only when needed
 FROM base AS builder
@@ -23,7 +32,7 @@ WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN yarn build
+RUN npm run build
 
 # 3. Production image, copy all the files and run next
 FROM base AS runner

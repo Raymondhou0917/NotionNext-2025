@@ -217,11 +217,16 @@ const nextConfig = {
     defaultPathMap,
     { dev, dir, outDir, distDir, buildId }
   ) {
+    const pathMap = { ...defaultPathMap }
+    // 刪除搜尋相關的動態路由，因為這些頁面應該在運行時生成
+    delete pathMap['/search/[keyword]']
+    delete pathMap['/search/[keyword]/page/[page]']
+    delete pathMap['/zh/search/[keyword]']
+    delete pathMap['/zh/search/[keyword]/page/[page]']
     // export 静态导出时 忽略/pages/sitemap.xml.js ， 否则和getServerSideProps这个动态文件冲突
-    const pages = { ...defaultPathMap }
-    delete pages['/sitemap.xml']
-    delete pages['/auth']
-    return pages
+    delete pathMap['/sitemap.xml']
+    delete pathMap['/auth']
+    return pathMap
   },
   publicRuntimeConfig: {
     // 这里的配置既可以服务端获取到，也可以在浏览器端获取到
