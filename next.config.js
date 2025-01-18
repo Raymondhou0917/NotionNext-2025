@@ -218,20 +218,35 @@ const nextConfig = {
     { dev, dir, outDir, distDir, buildId }
   ) {
     const pathMap = { ...defaultPathMap }
-    // Remove search-related paths during static export
+    // Remove all search-related paths during static export
     if (process.env.EXPORT) {
       Object.keys(pathMap).forEach(path => {
+        // 處理所有語言前綴的搜尋路由
         if (path.includes('/search')) {
           delete pathMap[path]
         }
+        // 處理所有語言前綴的搜尋路由
+        locales.forEach(locale => {
+          if (path.includes(`/${locale}/search`)) {
+            delete pathMap[path]
+          }
+        })
       })
     }
-    // 刪除搜尋相關的動態路由，因為這些頁面應該在運行時生成
+
+    // 刪除所有語言版本的搜尋相關動態路由
+    locales.forEach(locale => {
+      delete pathMap[`/${locale}/search`]
+      delete pathMap[`/${locale}/search/[keyword]`]
+      delete pathMap[`/${locale}/search/[keyword]/page/[page]`]
+    })
+
+    // 刪除默認路徑
+    delete pathMap['/search']
     delete pathMap['/search/[keyword]']
     delete pathMap['/search/[keyword]/page/[page]']
-    delete pathMap['/zh/search/[keyword]']
-    delete pathMap['/zh/search/[keyword]/page/[page]']
-    // export 静态导出时 忽略/pages/sitemap.xml.js ， 否则和getServerSideProps这个动态文件冲突
+    
+    // export 静态导出时 忽略動態生成的頁面
     delete pathMap['/sitemap.xml']
     delete pathMap['/auth']
     return pathMap
