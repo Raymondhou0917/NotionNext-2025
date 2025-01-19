@@ -2,7 +2,7 @@
 
 const BLOG = {
   // Important page_id！！！Duplicate Template from  https://www.notion.so/tanghh/02ab3b8678004aa69e9e415905ef32a5
-  SITE_TITLE: process.env.NEXT_PUBLIC_SITE_TITLE || '雷蒙三十的社群內容彙整', // 默認標題
+  SITE_TITLE: process.env.NEXT_PUBLIC_SITE_TITLE || '雷蒙三十的社群內容彙整| 一人公司與數位遊牧實踐者的日常分享', // 默認標題
   NOTION_PAGE_ID:
     process.env.NOTION_PAGE_ID ||
     '7c78ffee2b0e427787a4ab6c7ea898fb',
@@ -18,10 +18,14 @@ const BLOG = {
   AUTHOR: process.env.NEXT_PUBLIC_AUTHOR || '侯智薰（雷蒙）', // 您的昵称 例如 tangly1024
   BIO: process.env.NEXT_PUBLIC_BIO || '一個熱愛生產力、數位工具的創作者 🚀', // 作者简介
   LINK: process.env.NEXT_PUBLIC_LINK || 'https://newsletters.raymondhouch.com', // 网站地址
-  KEYWORDS: process.env.NEXT_PUBLIC_KEYWORD || 'Notion, 雷蒙三十, 侯智薰, 社群內容彙整', // 网站关键词 英文逗号隔开
+  KEYWORDS: process.env.NEXT_PUBLIC_KEYWORD || 'Notion, 雷蒙三十, 侯智薰, 社群內容彙整, AI自動化, Notion, ChatGPT, 智能工作宅, 生產力工具, 數位遊牧, 一人公司, Solopreneur', // 网站关键词 英文逗号隔开
   BLOG_FAVICON: process.env.NEXT_PUBLIC_FAVICON || '/favicon.ico', // blog favicon 配置, 默认使用 /public/favicon.ico，支持在线图片，如 https://img.imesong.com/favicon.png
   BEI_AN: process.env.NEXT_PUBLIC_BEI_AN || '', // 备案号 闽ICP备XXXXXX
   BEI_AN_LINK: process.env.NEXT_PUBLIC_BEI_AN_LINK || 'https://raymondhouch.com/', // 备案查询链接，如果用了萌备等备案请在这里填写
+
+  SITE_DESCRIPTION: '雷蒙三十的社群內容彙整，分享 AI 自動化、Notion、ChatGPT、智能工作宅的實用心得，幫助現代人聰明工作、好好生活',
+  ANALYTICS_GOOGLE_ID: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || 'G-41MLSE3WQ9', // Google Analytics
+  MAIN_BLOG_LINK: 'https://raymondhouch.com', // 主站連結
 
   // RSS订阅
   ENABLE_RSS: process.env.NEXT_PUBLIC_ENABLE_RSS || true, // 是否开启RSS订阅功能
