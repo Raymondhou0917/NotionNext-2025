@@ -21,7 +21,7 @@ export const getServerSideProps = async ctx => {
       'LINK',
       siteData?.siteInfo?.link,
       siteData.NOTION_CONFIG
-    )
+    ).replace(/\u200b/g, '')
     const localeFields = generateLocalesSitemap(link, siteData.allPages, locale)
     fields = fields.concat(localeFields)
   }
