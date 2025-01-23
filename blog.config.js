@@ -60,8 +60,28 @@ const BLOG = {
   // 全局自定义CSS
   CUSTOM_CSS: `
   /* 導航欄顏色 */
-  #sticky-nav.bg-indigo-700 {
-    background-color: #21A4B1;
+  #sticky-nav.bg-indigo-700,
+  .bg-indigo-700 {
+    background-color: #21A4B1 !important;
+  }
+
+  /* 所有 indigo-500 背景 */
+  .bg-indigo-500 {
+    background-color: #21A4B1 !important;
+  }
+
+  /* 所有 indigo 文字顏色 */
+  .text-indigo-500,
+  .text-indigo-600,
+  .hover\:text-indigo-500:hover,
+  .hover\:text-indigo-600:hover {
+    color: #21A4B1 !important;
+  }
+
+  /* 所有 indigo 邊框顏色 */
+  .border-indigo-500,
+  .hover\:border-indigo-500:hover {
+    border-color: #21A4B1 !important;
   }
 
   /* 夜間模式導航欄顏色 */
