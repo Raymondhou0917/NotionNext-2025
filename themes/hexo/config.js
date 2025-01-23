@@ -1,5 +1,5 @@
 const CONFIG = {
-  HEXO_HOME_BANNER_ENABLE: true,
+  HEXO_HOME_BANNER_ENABLE: false,
   // 3.14.1以后的版本中，欢迎语在blog.config.js中配置，用英文逗号','隔开多个。
   HEXO_HOME_BANNER_GREETINGS: [
     'Be the Lifehacker 🚀 一個實踐一人公司的創作者。',
@@ -32,7 +32,7 @@ const CONFIG = {
   HEXO_ARTICLE_RECOMMEND: true, // 文章关联推荐
 
   HEXO_WIDGET_LATEST_POSTS: true, // 显示最新文章卡
-  HEXO_WIDGET_ANALYTICS: false, // 显示统计卡
+  HEXO_WIDGET_ANALYTICS: true, // 显示统计卡
   HEXO_WIDGET_TO_TOP: true,
   HEXO_WIDGET_TO_COMMENT: true, // 跳到评论区
   HEXO_WIDGET_DARK_MODE: true, // 夜间模式
