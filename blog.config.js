@@ -7,7 +7,7 @@ const BLOG = {
   NOTION_PAGE_ID:
     process.env.NOTION_PAGE_ID ||
     '7c78ffee2b0e427787a4ab6c7ea898fb',
-  THEME: process.env.NEXT_PUBLIC_THEME || 'fukasawa', // 当前主题，在themes文件夹下可找到所有支持的主题；主题名称就是文件夹名，例如 example,fukasawa,gitbook,heo,hexo,landing,matery,medium,next,nobelium,plog,simple
+  THEME: process.env.NEXT_PUBLIC_THEME || 'hexo', // 当前主题，在themes文件夹下可找到所有支持的主题；主题名称就是文件夹名，例如 example,fukasawa,gitbook,heo,hexo,landing,matery,medium,next,nobelium,plog,simple
   LANG: process.env.NEXT_PUBLIC_LANG || 'zh-TW', // e.g 'zh-CN','en-US'  see /lib/lang.js for more.
   SINCE: process.env.NEXT_PUBLIC_SINCE || new Date().getFullYear(), // e.g if leave this empty, current year will be used.
 
@@ -17,7 +17,7 @@ const BLOG = {
   APPEARANCE_DARK_TIME: process.env.NEXT_PUBLIC_APPEARANCE_DARK_TIME || [18, 6], // 夜间模式起至时间，false时关闭根据时间自动切换夜间模式
 
   AUTHOR: process.env.NEXT_PUBLIC_AUTHOR || '侯智薰（雷蒙）', // 您的昵称 例如 tangly1024
-  BIO: process.env.NEXT_PUBLIC_BIO || '一個熱愛生產力、數位工具的創作者 🚀', // 作者简介
+  BIO: process.env.NEXT_PUBLIC_BIO || 'Be the Lifehacker 🚀 一個實踐一人公司的創作者。', // 作者简介
   LINK: process.env.NEXT_PUBLIC_LINK || 'https://newsletters.raymondhouch.com', // 网站地址
   KEYWORDS: process.env.NEXT_PUBLIC_KEYWORD || '雷蒙三十, 侯智薰, 社群內容彙整, AI自動化, Notion, ChatGPT, 智能工作宅, 生產力工具, 數位遊牧, 一人公司, Solopreneur', // 网站关键词 英文逗号隔开
   BLOG_FAVICON: process.env.NEXT_PUBLIC_FAVICON || '/favicon.ico', // blog favicon 配置, 默认使用 /public/favicon.ico，支持在线图片，如 https://img.imesong.com/favicon.png
@@ -56,6 +56,90 @@ const BLOG = {
 
   // 自定义菜单
   CUSTOM_MENU: process.env.NEXT_PUBLIC_CUSTOM_MENU || true, // 支持Menu类型的菜单，替代了3.12版本前的Page类型
+
+  // 全局自定义CSS
+  CUSTOM_CSS: `
+  /* 導航欄顏色 */
+  #sticky-nav.bg-indigo-700 {
+    background-color: #21A4B1;
+  }
+
+  /* 夜間模式導航欄顏色 */
+  .dark div#sticky-nav {
+    background-color: #21A4B1;
+  }
+
+  /* 首頁開始閱讀按鈕 */
+  .glassmorphism.w-40.z-40 {
+    background-color: #21A4B1;
+    border: none;
+  }
+
+  /* 標籤顏色 */
+  a.cursor-pointer.bg-indigo-700 {
+    background-color: #21A4B1;
+  }
+
+  /* 移動端側邊欄 */
+  #side-bar>.bg-indigo-700 {
+    background-color: #21A4B1;
+  }
+
+  /* 移動端側邊欄選單 */
+  nav div:hover,li:hover {
+    background-color: #21A4B1!important;
+  }
+
+  /* 懸浮選單 */
+  .right-2 .bg-indigo-700 {
+    background-color: #21A4B1;
+  }
+
+  /* 目錄進度條 */
+  .h-4.bg-indigo-400 {
+    background-color: #21A4B1;
+  }
+
+  /* 目錄文字高亮 */
+  nav .text-green-500{
+    color: #21A4B1;
+  }
+
+  /* 網站頁尾 */ 
+  footer.bg-indigo-700{
+    background-color: #21A4B1;
+  }
+
+  /* 翻頁按鈕 */
+  button.bg-indigo-700{
+    background-color: #21A4B1;
+  }
+
+  /* 隱藏文章頁發布時間 */
+  #article-wrapper > div.wow.fadeInUp.px-10 > section > div.flex.flex-wrap.gap-3.mt-5.text-sm > a {
+    display: none;
+  }
+
+  /* 隱藏文章頁更新時間 */
+  #article-wrapper > div.wow.fadeInUp.px-10 > section > div.flex.flex-wrap.gap-3.mt-5.text-sm > span.whitespace-nowrap {
+    display: none;
+  }
+
+  /* 隱藏文章頁閱讀次數 */
+  #article-wrapper .busuanzi_container_page_pv {
+    display: none !important;
+  }
+
+  /* 隱藏文章頁字數 */
+  #wordCountWrapper > span:nth-child(1){
+    display: none !important;
+  }
+
+  /* 隱藏文章頁閱讀時長 */
+  #wordCountWrapper > span:nth-child(2){
+    display: none;
+  }
+  `,
 
   // 文章列表相关设置
   CAN_COPY: process.env.NEXT_PUBLIC_CAN_COPY || true, // 是否允许复制页面内容 默认允许，如果设置为false、则全栈禁止复制内容。
