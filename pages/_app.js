@@ -12,6 +12,7 @@ import { getBaseLayoutByTheme } from '@/themes/theme'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { getQueryParam } from '../lib/utils'
+import Head from 'next/head'
 
 // 各种扩展插件 这个要阻塞引入
 import BLOG from '@/blog.config'
@@ -63,6 +64,9 @@ const MyApp = ({ Component, pageProps }) => {
   )
   return (
     <>
+      <Head>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6981486624971493" crossorigin="anonymous"></script>
+      </Head>
       {enableClerk ? (
         <ClerkProvider localization={zhCN}>{content}</ClerkProvider>
       ) : (
