@@ -3,6 +3,7 @@
 const BLOG = {
   // Important page_id！！！Duplicate Template from  https://www.notion.so/tanghh/02ab3b8678004aa69e9e415905ef32a5
   SITE_TITLE: process.env.NEXT_PUBLIC_SITE_TITLE || '雷蒙三十的社群內容彙整| 一人公司與數位遊牧實踐者的日常分享', // 默認標題
+  SITE_DESCRIPTION: '雷蒙三十品牌內容主站＆電子報訂閱，請前往 raymondhouch.com',
   NOTION_PAGE_ID:
     process.env.NOTION_PAGE_ID ||
     '7c78ffee2b0e427787a4ab6c7ea898fb',
@@ -23,7 +24,6 @@ const BLOG = {
   BEI_AN: process.env.NEXT_PUBLIC_BEI_AN || '', // 备案号 闽ICP备XXXXXX
   BEI_AN_LINK: process.env.NEXT_PUBLIC_BEI_AN_LINK || 'https://raymondhouch.com/', // 备案查询链接，如果用了萌备等备案请在这里填写
 
-  SITE_DESCRIPTION: '雷蒙三十的社群內容彙整，分享 AI 自動化、Notion、ChatGPT、智能工作宅的實用心得，幫助現代人聰明工作、好好生活',
   ANALYTICS_GOOGLE_ID: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || 'G-41MLSE3WQ9', // Google Analytics
   MAIN_BLOG_LINK: 'https://raymondhouch.com', // 主站連結
 

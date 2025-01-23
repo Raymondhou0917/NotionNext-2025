@@ -35,9 +35,15 @@ export const getServerSideProps = async ctx => {
 }
 
 function generateLocalesSitemap(link, allPages, locale) {
+  // 移除 link 中的零寬空格
+  link = link.replace(/\u200b/g, '')
+  
   if (locale && locale.length > 0 && locale.indexOf('/') !== 0) {
     locale = '/' + locale
   }
+  // 移除 locale 中的零寬空格
+  locale = locale.replace(/\u200b/g, '')
+  
   const defaultFields = [
     {
       loc: `${link}${locale}`,
