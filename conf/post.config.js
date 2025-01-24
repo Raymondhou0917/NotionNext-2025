@@ -26,7 +26,7 @@ module.exports = {
   POST_LIST_PREVIEW: process.env.NEXT_PUBLIC_POST_PREVIEW || 'true', // 是否在列表加載文章預覽
   POST_PREVIEW_LINES: process.env.NEXT_PUBLIC_POST_POST_PREVIEW_LINES || 8, // 預覽部落格行數
   POST_RECOMMEND_COUNT: process.env.NEXT_PUBLIC_POST_RECOMMEND_COUNT || 4, // 推薦文章數量
-  POSTS_PER_PAGE: process.env.NEXT_PUBLIC_POST_PER_PAGE || 10, // 每頁文章數量
+  POSTS_PER_PAGE: process.env.NEXT_PUBLIC_POST_PER_PAGE || 6, // 每頁文章數量
   POSTS_SORT_BY: process.env.NEXT_PUBLIC_POST_SORT_BY || 'notion', // 排序方式：'date' 按時間，'notion' 由 notion 控制
   POST_WAITING_TIME_FOR_404:
     process.env.NEXT_PUBLIC_POST_WAITING_TIME_FOR_404 || '10', // 文章加載超時時間，單位秒；超時後跳轉到 404 頁面

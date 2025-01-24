@@ -89,7 +89,10 @@ export default function SideRight(props) {
           latestPosts &&
           latestPosts.length > 0 && (
             <Card>
-              <LatestPostsGroup {...props} />
+              <LatestPostsGroup
+                latestPosts={latestPosts?.slice(0, 4)}
+                {...props}
+              />
             </Card>
           )}
 
