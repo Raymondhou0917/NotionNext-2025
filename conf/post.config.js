@@ -22,14 +22,14 @@ module.exports = {
   POST_TITLE_ICON: process.env.NEXT_PUBLIC_POST_TITLE_ICON || true, // 是否顯示標題 icon
   POST_DISABLE_GALLERY_CLICK:
     process.env.NEXT_PUBLIC_POST_DISABLE_GALLERY_CLICK || false, // 畫冊視圖禁止點擊，方便在友鏈頁面的畫冊插入連結
-  POST_LIST_STYLE: process.env.NEXT_PUBLIC_POST_LIST_STYLE || 'scroll', // ['page','scroll] 文章列表樣式：頁碼分頁、單頁滾動加載
+  POST_LIST_STYLE: process.env.NEXT_PUBLIC_POST_LIST_STYLE || 'page', // ['page','scroll] 文章列表樣式：頁碼分頁、單頁滾動加載
   POST_LIST_PREVIEW: process.env.NEXT_PUBLIC_POST_PREVIEW || 'true', // 是否在列表加載文章預覽
-  POST_PREVIEW_LINES: process.env.NEXT_PUBLIC_POST_POST_PREVIEW_LINES || 6, // 預覽部落格行數
+  POST_PREVIEW_LINES: process.env.NEXT_PUBLIC_POST_POST_PREVIEW_LINES || 8, // 預覽部落格行數
   POST_RECOMMEND_COUNT: process.env.NEXT_PUBLIC_POST_RECOMMEND_COUNT || 4, // 推薦文章數量
   POSTS_PER_PAGE: process.env.NEXT_PUBLIC_POST_PER_PAGE || 10, // 每頁文章數量
   POSTS_SORT_BY: process.env.NEXT_PUBLIC_POST_SORT_BY || 'notion', // 排序方式：'date' 按時間，'notion' 由 notion 控制
   POST_WAITING_TIME_FOR_404:
-    process.env.NEXT_PUBLIC_POST_WAITING_TIME_FOR_404 || '8', // 文章加載超時時間，單位秒；超時後跳轉到 404 頁面
+    process.env.NEXT_PUBLIC_POST_WAITING_TIME_FOR_404 || '10', // 文章加載超時時間，單位秒；超時後跳轉到 404 頁面
 
   // 標籤相關
   TAG_SORT_BY_COUNT: true, // 標籤是否按照文章數量倒序排列
