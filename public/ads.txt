@@ -1,2 +1,1 @@
 google.com, pub-6981486624971493, DIRECT, f08c47fec0942fa0
-MANAGERDOMAIN=raymondhouch.com
