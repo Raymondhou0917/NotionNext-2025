@@ -11,6 +11,7 @@ import CategoryGroup from './CategoryGroup'
 import { InfoCard } from './InfoCard'
 import LatestPostsGroup from './LatestPostsGroup'
 import TagGroups from './TagGroups'
+import { AdSlot } from '@/components/GoogleAdsense'
 
 const HexoRecentComments = dynamic(() => import('./HexoRecentComments'))
 const FaceBookPage = dynamic(
@@ -49,29 +50,51 @@ export default function SideRight(props) {
   const { locale } = useGlobal()
 
   // 文章全屏处理
-  if (post && post?.fullWidth) {
+  const fullWidth = post?.fullWidth ?? false
+  const showRightArea = siteConfig('RIGHT_PANEL', null, CONFIG)
+
+  if (!showRightArea) {
     return null
   }
 
   return (
-    <div
-      id='sideRight'
-      className={` lg:w-80 lg:pt-8 ${post ? 'lg:pt-0' : 'lg:pt-4'}`}>
-      <div className='sticky top-8 space-y-4'>
-        {post && post.toc && post.toc.length > 1 && (
+    <div className={`${className || ''}`}>
+      <div className='sticky top-8'>
+        {/* 广告 */}
+        <Card>
+          <AdSlot type='auto' />
+        </Card>
+
+        {notice && <Announcement post={notice} />}
+        
+        {rightAreaSlot}
+
+        {!fullWidth && post && post?.toc && (
           <Card>
             <Catalog toc={post.toc} />
           </Card>
         )}
 
-        <InfoCard {...props} />
         {siteConfig('HEXO_WIDGET_ANALYTICS', null, CONFIG) && (
-          <AnalyticsCard {...props} />
+          <Card>
+            <AnalyticsCard {...props} />
+          </Card>
+        )}
+
+        {/* 信息卡片 */}
+        {siteConfig('HEXO_WIDGET_PROFILE_ENABLE', null, CONFIG) && (
+          <Card>
+            <InfoCard {...props} />
+            {/* 广告 */}
+            <div className='mt-4'>
+              <AdSlot type='flow' />
+            </div>
+          </Card>
         )}
 
         {showCategory && (
           <Card>
-            <div className='ml-2 mb-1 '>
+            <div className='ml-2 mb-1 font-sans'>
               <i className='fas fa-th' /> {locale.COMMON.CATEGORY}
             </div>
             <CategoryGroup
@@ -80,30 +103,42 @@ export default function SideRight(props) {
             />
           </Card>
         )}
+
         {showTag && (
           <Card>
+            <div className='ml-2 mb-1 font-sans'>
+              <i className='fas fa-tag' /> {locale.COMMON.TAGS}
+            </div>
             <TagGroups tags={tags} currentTag={currentTag} />
           </Card>
         )}
+
         {siteConfig('HEXO_WIDGET_LATEST_POSTS', null, CONFIG) &&
           latestPosts &&
           latestPosts.length > 0 && (
             <Card>
-              <LatestPostsGroup
-                latestPosts={latestPosts?.slice(0, 4)}
-                {...props}
-              />
+              <LatestPostsGroup {...props} />
             </Card>
           )}
 
-        <Announcement post={notice} />
+        {/* 展示Live2D */}
+        <div className='flex justify-center'>
+          <Live2D />
+        </div>
 
-        {siteConfig('COMMENT_WALINE_SERVER_URL') &&
-          siteConfig('COMMENT_WALINE_RECENT') && <HexoRecentComments />}
-
-        {rightAreaSlot}
-        <FaceBookPage />
-        <Live2D />
+        {/* 底部嵌入 */}
+        <div id='sidebar-bottom' className='justify-center'>
+          {siteConfig('FACEBOOK_PAGE_TITLE') && (
+            <Card>
+              <FaceBookPage />
+            </Card>
+          )}
+          {siteConfig('COMMENT_WALINE_SERVER_URL') && (
+            <Card>
+              <HexoRecentComments />
+            </Card>
+          )}
+        </div>
       </div>
     </div>
   )

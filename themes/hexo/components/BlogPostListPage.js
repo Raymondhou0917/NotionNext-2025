@@ -3,6 +3,7 @@ import { useGlobal } from '@/lib/global'
 import BlogPostCard from './BlogPostCard'
 import BlogPostListEmpty from './BlogPostListEmpty'
 import PaginationNumber from './PaginationNumber'
+import { AdSlot } from '@/components/GoogleAdsense'
 
 /**
  * 文章列表分页表格
@@ -24,13 +25,17 @@ const BlogPostListPage = ({ page = 1, posts = [], postCount, siteInfo }) => {
       <div id='container' className='w-full'>
         {/* 文章列表 */}
         <div className='space-y-6 px-2'>
-          {posts?.map(post => (
-            <BlogPostCard
-              index={posts.indexOf(post)}
-              key={post.id}
-              post={post}
-              siteInfo={siteInfo}
-            />
+          {posts?.map((post, index) => (
+            <>
+              <BlogPostCard
+                index={index}
+                key={post.id}
+                post={post}
+                siteInfo={siteInfo}
+              />
+              {/* 每3篇文章後插入一個廣告 */}
+              {(index + 1) % 3 === 0 && <AdSlot type='flow' />}
+            </>
           ))}
         </div>
         {showPagination && (
