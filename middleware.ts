@@ -64,7 +64,10 @@ const noAuthMiddleware = async (req: NextRequest, ev: any) => {
       // 檢查是否為有效的頁面 ID
       if (!validPageIds.includes(uuidFormat)) {
         console.log(`阻止訪問未知的 Notion ID: ${uuidFormat}`)
-        return new NextResponse('頁面不存在', { status: 404 })
+        // 重定向到自定義 404 頁面而不是返回純文本錯誤
+        const redirectToUrl = req.nextUrl.clone()
+        redirectToUrl.pathname = '/404'
+        return NextResponse.redirect(redirectToUrl, 307)
       }
       
       lastPart = uuidFormat
