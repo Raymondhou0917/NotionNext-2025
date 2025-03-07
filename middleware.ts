@@ -37,23 +37,45 @@ const noAuthMiddleware = async (req: NextRequest, ev: any) => {
   // 如果没有配置 Clerk 相关环境变量，返回一个默认响应或者继续处理请求
   if (BLOG['UUID_REDIRECT']) {
     let redirectJson: Record<string, string> = {}
+    let validPageIds: string[] = []
+    
     try {
-      const response = await fetch(`${req.nextUrl.origin}/redirect.json`)
-      if (response.ok) {
-        redirectJson = (await response.json()) as Record<string, string>
+      // 獲取重定向映射和有效頁面 ID 列表
+      const redirectResponse = await fetch(`${req.nextUrl.origin}/redirect.json`)
+      const validPagesResponse = await fetch(`${req.nextUrl.origin}/valid-pages.json`)
+      
+      if (redirectResponse.ok) {
+        redirectJson = (await redirectResponse.json()) as Record<string, string>
+      }
+      
+      if (validPagesResponse.ok) {
+        validPageIds = await validPagesResponse.json() as string[]
       }
     } catch (err) {
-      console.error('Error fetching static file:', err)
+      console.error('Error fetching static files:', err)
     }
+    
     let lastPart = getLastPartOfUrl(req.nextUrl.pathname) as string
+    
+    // 檢查是否為 Notion ID 格式
     if (checkStrIsNotionId(lastPart)) {
-      lastPart = idToUuid(lastPart)
+      const uuidFormat = idToUuid(lastPart)
+      
+      // 檢查是否為有效的頁面 ID
+      if (!validPageIds.includes(uuidFormat)) {
+        console.log(`阻止訪問未知的 Notion ID: ${uuidFormat}`)
+        return new NextResponse('頁面不存在', { status: 404 })
+      }
+      
+      lastPart = uuidFormat
     }
+    
+    // 如果是有效 ID 且有對應的 slug，進行重定向
     if (lastPart && redirectJson[lastPart]) {
       const redirectToUrl = req.nextUrl.clone()
       redirectToUrl.pathname = '/' + redirectJson[lastPart]
       console.log(
-        `redirect from ${req.nextUrl.pathname} to ${redirectToUrl.pathname}`
+        `重定向從 ${req.nextUrl.pathname} 到 ${redirectToUrl.pathname}`
       )
       return NextResponse.redirect(redirectToUrl, 308)
     }

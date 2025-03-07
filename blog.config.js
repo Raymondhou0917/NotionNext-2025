@@ -98,7 +98,7 @@ const BLOG = {
     'Hi，我是侯智薰（雷蒙），歡迎來到我的社群媒體的內容彙整站，主要內容網站為：raymondhouch.com',
 
   // uuid重定向至 slug
-  UUID_REDIRECT: process.env.UUID_REDIRECT || false
+  UUID_REDIRECT: process.env.UUID_REDIRECT || true
 }
 
 module.exports = BLOG
