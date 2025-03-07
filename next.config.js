@@ -122,6 +122,12 @@ const nextConfig = {
             source: '/feed',
             destination: '/rss/feed.xml',
             permanent: true
+          },
+          // 阻止 Notion ID 格式的 URL 被索引
+          {
+            source: '/:path(^[0-9a-f]{32}$)',
+            destination: '/404',
+            permanent: true
           }
         ]
       },
