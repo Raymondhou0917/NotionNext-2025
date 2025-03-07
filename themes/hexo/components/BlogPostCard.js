@@ -7,12 +7,27 @@ import { BlogPostCardInfo } from './BlogPostCardInfo'
 const BlogPostCard = ({ index, post, showSummary, siteInfo }) => {
   const showPreview =
     siteConfig('HEXO_POST_LIST_PREVIEW', null, CONFIG) && post.blockMap
-  if (
-    post &&
-    !post.pageCoverThumbnail &&
-    siteConfig('HEXO_POST_LIST_COVER_DEFAULT', null, CONFIG)
-  ) {
-    post.pageCoverThumbnail = siteInfo?.pageCover
+  
+  // 特色圖片處理邏輯改進
+  // 1. 檢查文章是否有封面圖
+  // 2. 如果沒有封面圖，檢查文章內容中是否有圖片
+  // 3. 如果內容中也沒有圖片，使用網站預設圖片
+  if (post && !post.pageCoverThumbnail) {
+    // 嘗試從文章內容中提取第一張圖片作為特色圖片
+    if (post.blockMap) {
+      const blocks = Object.values(post.blockMap.block || {})
+      for (const block of blocks) {
+        if (block.value?.type === 'image' && block.value?.properties?.source?.[0]?.[0]) {
+          post.pageCoverThumbnail = block.value.properties.source[0][0]
+          break
+        }
+      }
+    }
+    
+    // 如果仍然沒有找到圖片，使用預設圖片
+    if (!post.pageCoverThumbnail && siteConfig('HEXO_POST_LIST_COVER_DEFAULT', null, CONFIG)) {
+      post.pageCoverThumbnail = siteInfo?.pageCover
+    }
   }
   const showPageCover =
     siteConfig('HEXO_POST_LIST_COVER', null, CONFIG) &&
