@@ -1,0 +1,21 @@
+{
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "deploy": {
+    "startCommand": "npm start",
+    "healthCheck": {
+      "path": "/",
+      "port": 3000
+    },
+    "rules": [
+      {
+        "source": "/:path(^[0-9a-f]{32}$)",
+        "destination": "/404",
+        "permanent": true
+      }
+    ]
+  }
+}

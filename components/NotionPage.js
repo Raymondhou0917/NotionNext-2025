@@ -6,6 +6,7 @@ import 'katex/dist/katex.min.css'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 import { NotionRenderer } from 'react-notion-x'
+import ArticleAd from './ArticleAd'
 
 /**
  * 整个站点的核心组件
@@ -118,6 +119,7 @@ const NotionPage = ({ post, className }) => {
         }}
       />
 
+      <ArticleAd />
       <AdEmbed />
       <PrismMac />
     </div>

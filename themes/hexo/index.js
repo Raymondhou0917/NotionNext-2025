@@ -330,19 +330,25 @@ const LayoutSlug = props => {
  */
 const Layout404 = props => {
   const router = useRouter()
+  const path = router.asPath
+  const isNotionId = /\/([0-9a-f]{32})(\/|$)/.test(path)
+  
   useEffect(() => {
-    // 延时3秒如果加载失败就返回首页
-    setTimeout(() => {
-      if (isBrowser) {
-        const article = document.querySelector('#article-wrapper #notion-article')
-        if (!article) {
-          router.push('/').then(() => {
-            // console.log('找不到页面', router.asPath)
-          })
+    // 只有非 Notion ID 格式的 URL 才自動跳轉到首頁
+    if (!isNotionId) {
+      setTimeout(() => {
+        if (isBrowser) {
+          const article = document.querySelector('#article-wrapper #notion-article')
+          if (!article) {
+            router.push('/').then(() => {
+              console.log('找不到頁面，重定向到首頁', router.asPath)
+            })
+          }
         }
-      }
-    }, 3000)
-  })
+      }, 5000)
+    }
+  }, [router, isNotionId])
+  
   return (
     <>
       <div className='text-black w-full h-screen text-center justify-center content-center items-center flex flex-col'>
@@ -350,8 +356,20 @@ const Layout404 = props => {
           <h2 className='inline-block border-r-2 border-gray-600 mr-2 px-3 py-2 align-top'>
             404
           </h2>
-          <div className='inline-block text-left h-32 leading-10 items-center'>
-            <h2 className='m-0 p-0'>页面未找到</h2>
+          <div className='inline-block text-left leading-10 items-center'>
+            <h2 className='m-0 p-0'>{isNotionId ? '無效的 Notion 頁面' : '頁面未找到'}</h2>
+            {isNotionId && (
+              <p className='text-sm text-gray-500 mt-2'>
+                您嘗試訪問的 Notion 頁面不在我們的資料庫中或未授權訪問。<br />
+              </p>
+            )}
+            {!isNotionId && (
+              <p className='text-sm text-gray-500 mt-2'>
+                5 秒後將自動返回首頁...<br />
+                <Link href='/' className='text-blue-500 hover:underline'>立即返回首頁</Link>
+              </p>
+            )}
+            <p><Link href='https://raymondhouch.com/' className='text-blue-500 hover:underline'>或者前往雷蒙的個人官網</Link></p>
           </div>
         </div>
       </div>
