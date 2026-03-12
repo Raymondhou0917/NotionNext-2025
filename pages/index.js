@@ -4,6 +4,7 @@ import { getGlobalData, getPostBlocks } from '@/lib/db/getSiteData'
 import { generateRobotsTxt } from '@/lib/robots.txt'
 import { generateRss } from '@/lib/rss'
 import { generateSitemapXml } from '@/lib/sitemap.xml'
+import { getPublishedRoutablePosts } from '@/lib/utils/post'
 import { DynamicLayout } from '@/themes/theme'
 import { generateRedirectJson } from '@/lib/redirect'
 
@@ -30,9 +31,7 @@ export async function getStaticProps(req) {
     12,
     props?.NOTION_CONFIG
   )
-  props.posts = props.allPages?.filter(
-    page => page.type === 'Post' && page.status === 'Published'
-  )
+  props.posts = getPublishedRoutablePosts(props.allPages)
 
   // 处理分页
   if (siteConfig('POST_LIST_STYLE') === 'scroll') {

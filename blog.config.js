@@ -26,6 +26,9 @@ const BLOG = {
 
   ANALYTICS_GOOGLE_ID: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || 'G-41MLSE3WQ9', // Google Analytics
   MAIN_BLOG_LINK: 'https://raymondhouch.com', // 主站連結
+  SECONDARY_BLOG_LINK:
+    process.env.NEXT_PUBLIC_SECONDARY_BLOG_LINK || 'https://lifehacker.tw', // 品牌主站 / 次主站
+  SEO_CANONICAL_MODE: process.env.NEXT_PUBLIC_SEO_CANONICAL_MODE || 'self', // self | main
 
   // RSS订阅
   ENABLE_RSS: process.env.NEXT_PUBLIC_ENABLE_RSS || 'true', // 是否开启RSS订阅功能

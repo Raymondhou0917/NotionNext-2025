@@ -1,6 +1,7 @@
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
 import { getGlobalData } from '@/lib/db/getSiteData'
+import { getPublishedRoutablePosts } from '@/lib/utils/post'
 import { DynamicLayout } from '@/themes/theme'
 
 /**
@@ -19,9 +20,9 @@ export async function getStaticProps({ params: { category, page } }) {
   let props = await getGlobalData({ from })
 
   // 过滤状态类型
-  props.posts = props.allPages
-    ?.filter(page => page.type === 'Post' && page.status === 'Published')
-    .filter(post => post && post.category && post.category.includes(category))
+  props.posts = getPublishedRoutablePosts(props.allPages).filter(
+    post => post && post.category && post.category.includes(category)
+  )
   // 处理文章页数
   props.postCount = props.posts.length
   const POSTS_PER_PAGE = siteConfig('POSTS_PER_PAGE', 12, props?.NOTION_CONFIG)
@@ -57,11 +58,9 @@ export async function getStaticPaths() {
 
   categoryOptions?.forEach(category => {
     // 过滤状态类型
-    const categoryPosts = allPages
-      ?.filter(page => page.type === 'Post' && page.status === 'Published')
-      .filter(
-        post => post && post.category && post.category.includes(category.name)
-      )
+    const categoryPosts = getPublishedRoutablePosts(allPages).filter(
+      post => post && post.category && post.category.includes(category.name)
+    )
     // 处理文章页数
     const postCount = categoryPosts.length
     const totalPages = Math.ceil(
