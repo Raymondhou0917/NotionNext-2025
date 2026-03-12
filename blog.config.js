@@ -33,6 +33,14 @@ const BLOG = {
 
   ANALYTICS_GOOGLE_ID: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || 'G-41MLSE3WQ9', // Google Analytics
   MAIN_BLOG_LINK: 'https://raymondhouch.com', // 主站連結
+  SEO_CANONICAL_MODE: process.env.NEXT_PUBLIC_SEO_CANONICAL_MODE || 'self', // self | main-site | none
+  SEO_INDEX_HOME: process.env.NEXT_PUBLIC_SEO_INDEX_HOME ?? true,
+  SEO_INDEX_POSTS: process.env.NEXT_PUBLIC_SEO_INDEX_POSTS ?? true,
+  SEO_INDEX_PAGES: process.env.NEXT_PUBLIC_SEO_INDEX_PAGES ?? false,
+  SEO_INDEX_ARCHIVE: process.env.NEXT_PUBLIC_SEO_INDEX_ARCHIVE ?? false,
+  SEO_INDEX_CATEGORY: process.env.NEXT_PUBLIC_SEO_INDEX_CATEGORY ?? false,
+  SEO_INDEX_TAG: process.env.NEXT_PUBLIC_SEO_INDEX_TAG ?? false,
+  SEO_INDEX_SEARCH: process.env.NEXT_PUBLIC_SEO_INDEX_SEARCH ?? false,
 
   // RSS订阅
   ENABLE_RSS: process.env.NEXT_PUBLIC_ENABLE_RSS || 'true', // 是否开启RSS订阅功能

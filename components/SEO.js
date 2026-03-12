@@ -1,3 +1,4 @@
+import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import { loadExternalResource } from '@/lib/utils'
@@ -52,13 +53,23 @@ const SEO = props => {
     url = `${url}/${meta.slug}`
     image = meta.image || '/bg_image.jpg'
   }
-  const TITLE = siteConfig('SITE_TITLE') || '雷蒙三十的社群內容彙整';
-  const description = meta?.description || `${siteConfig('AUTHOR')}的社群內容彙整，AI 自動化工作應用、Notion 教學、一人公司經營和個人生產力秘訣。`;
+  const TITLE = siteConfig('SITE_TITLE') || '雷蒙三十的社群內容彙整'
+  const description =
+    meta?.description ||
+    `${siteConfig('AUTHOR')}的社群內容彙整，AI 自動化工作應用、Notion 教學、一人公司經營和個人生產力秘訣。`
   const type = meta?.type || 'website'
   const lang = siteConfig('LANG').replace('-', '_') // Facebook OpenGraph 要 zh_CN 這樣的格式才抓得到語言
   const category = meta?.category || KEYWORDS // section 主要是像是 category 這樣的分類，Facebook 用這個來抓連結的分類
   const favicon = siteConfig('BLOG_FAVICON')
   const BACKGROUND_DARK = siteConfig('BACKGROUND_DARK', '', NOTION_CONFIG)
+  const robots = getRobotsContent({ post, router, NOTION_CONFIG })
+  const canonicalUrl = getCanonicalUrl({
+    siteInfo,
+    post,
+    meta,
+    router,
+    NOTION_CONFIG
+  })
 
   const SEO_BAIDU_SITE_VERIFICATION = siteConfig(
     'SEO_BAIDU_SITE_VERIFICATION',
@@ -108,7 +119,6 @@ const SEO = props => {
         name='viewport'
         content='width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0'
       />
-      <meta name='robots' content='follow, index' />
       <meta charSet='UTF-8' />
       {SEO_GOOGLE_SITE_VERIFICATION && (
         <meta
@@ -132,8 +142,12 @@ const SEO = props => {
       <meta property='og:image' content={meta?.image || siteConfig('HOME_BANNER_IMAGE')} />
       <meta property='og:type' content={meta?.type || 'website'} />
       <meta property='og:url' content={url} />
-      <link rel='canonical' href={`https://raymondhouch.com${router.asPath}`} />
-      <meta name='robots' content='index,follow' />
+      <meta name='twitter:card' content='summary_large_image' />
+      <meta name='twitter:title' content={meta?.title || TITLE} />
+      <meta name='twitter:description' content={description} />
+      <meta name='twitter:image' content={meta?.image || siteConfig('HOME_BANNER_IMAGE')} />
+      {canonicalUrl && <link rel='canonical' href={canonicalUrl} />}
+      <meta name='robots' content={robots} />
       <link rel='icon' href={BLOG_FAVICON} />
 
       {COMMENT_WEBMENTION_ENABLE && (
@@ -175,32 +189,33 @@ const SEO = props => {
  */
 const TITLE_SUFFIX = ' | 雷蒙的社群內容彙整';
 const getSEOMeta = (props, router, locale) => {
-  const { post, siteInfo, tag, category, page } = props;
-  const IMAGE = siteInfo?.pageCover || '/default-share-image.jpg';
+  const { post, siteInfo, tag, category, page } = props
+  const IMAGE = siteInfo?.pageCover || '/default-share-image.jpg'
   const DESCRIPTION =
     siteInfo?.description ||
-    '探索數位工具、AI 自動化應用和生產力秘訣，這裡是雷蒙三十的社群內容整理站，幫助你聰明工作、好好生活。';
+    '探索數位工具、AI 自動化應用和生產力秘訣，這裡是雷蒙三十的社群內容整理站，幫助你聰明工作、好好生活。'
   const TITLE = siteConfig('SITE_TITLE')
-  const title = TITLE;
 
   // 從 router.query 中獲取 keyword
-  const keyword = router?.query?.keyword || '';
+  const keyword = router?.query?.keyword || ''
 
   switch (router.route) {
     case '/':
-      return { 
-        title: TITLE, 
-        description: DESCRIPTION, 
-        image: IMAGE, slug: '', 
-        type: 'website' 
-      };
-      case '/archive':
-        return { 
+      return {
+        title: TITLE,
+        description: DESCRIPTION,
+        image: IMAGE,
+        slug: '',
+        type: 'website'
+      }
+    case '/archive':
+      return {
           title: `文章歸檔${TITLE_SUFFIX}`,
-          description: '過往社群媒體內容彙整。', 
-          image: IMAGE, 
-          slug: 'archive', 
-          type: 'website' };
+          description: '過往社群媒體內容彙整。',
+          image: IMAGE,
+          slug: 'archive',
+          type: 'website'
+        }
     case '/page/[page]':
       return {
         title: `${page} | Page | ${siteInfo?.title}`,
@@ -289,6 +304,103 @@ const getSEOMeta = (props, router, locale) => {
         tags: post?.tags
       }
   }
+}
+
+const NOINDEX_ROUTES = new Set([
+  '/404',
+  '/page/[page]',
+  '/search',
+  '/search/[keyword]',
+  '/search/[keyword]/page/[page]'
+])
+
+function getRobotsContent({ post, router, NOTION_CONFIG }) {
+  if (post?.ext?.robots) {
+    return post.ext.robots
+  }
+
+  if (post?.ext?.noindex) {
+    return 'noindex,follow'
+  }
+
+  switch (router.route) {
+    case '/':
+      return siteConfig('SEO_INDEX_HOME', true, NOTION_CONFIG)
+        ? 'index,follow'
+        : 'noindex,follow'
+    case '/archive':
+      return siteConfig('SEO_INDEX_ARCHIVE', false, NOTION_CONFIG)
+        ? 'index,follow'
+        : 'noindex,follow'
+    case '/category':
+    case '/category/[category]':
+    case '/category/[category]/page/[page]':
+      return siteConfig('SEO_INDEX_CATEGORY', false, NOTION_CONFIG)
+        ? 'index,follow'
+        : 'noindex,follow'
+    case '/tag':
+    case '/tag/[tag]':
+    case '/tag/[tag]/page/[page]':
+      return siteConfig('SEO_INDEX_TAG', false, NOTION_CONFIG)
+        ? 'index,follow'
+        : 'noindex,follow'
+    default:
+      break
+  }
+
+  if (NOINDEX_ROUTES.has(router.route)) {
+    return siteConfig('SEO_INDEX_SEARCH', false, NOTION_CONFIG) &&
+      router.route.startsWith('/search')
+      ? 'index,follow'
+      : 'noindex,follow'
+  }
+
+  if (post?.type === 'Post') {
+    return siteConfig('SEO_INDEX_POSTS', true, NOTION_CONFIG)
+      ? 'index,follow'
+      : 'noindex,follow'
+  }
+
+  if (post?.type === 'Page') {
+    return siteConfig('SEO_INDEX_PAGES', false, NOTION_CONFIG)
+      ? 'index,follow'
+      : 'noindex,follow'
+  }
+
+  return 'index,follow'
+}
+
+function getCanonicalUrl({ siteInfo, post, meta, router, NOTION_CONFIG }) {
+  const canonicalFromPost = post?.ext?.canonical
+  if (canonicalFromPost) {
+    return canonicalFromPost
+  }
+
+  const canonicalMode =
+    post?.ext?.canonical_mode ||
+    siteConfig('SEO_CANONICAL_MODE', 'self', NOTION_CONFIG)
+
+  if (canonicalMode === 'none') {
+    return null
+  }
+
+  const origin =
+    canonicalMode === 'main-site'
+      ? siteConfig('MAIN_BLOG_LINK', BLOG.MAIN_BLOG_LINK, NOTION_CONFIG)
+      : siteInfo?.link || siteConfig('LINK', BLOG.LINK, NOTION_CONFIG)
+
+  return buildAbsoluteUrl(origin, meta?.slug || router.asPath || '')
+}
+
+function buildAbsoluteUrl(origin, path = '') {
+  if (!origin) {
+    return null
+  }
+
+  const normalizedOrigin = origin.replace(/\/+$/, '')
+  const cleanPath = String(path).split('?')[0].split('#')[0].replace(/^\/+/, '')
+
+  return cleanPath ? `${normalizedOrigin}/${cleanPath}` : normalizedOrigin
 }
 
 export default SEO
