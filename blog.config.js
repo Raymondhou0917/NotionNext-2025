@@ -29,9 +29,6 @@ const BLOG = {
   SECONDARY_BLOG_LINK:
     process.env.NEXT_PUBLIC_SECONDARY_BLOG_LINK || 'https://lifehacker.tw', // 品牌主站 / 次主站
   SEO_CANONICAL_MODE: process.env.NEXT_PUBLIC_SEO_CANONICAL_MODE || 'self', // self | main
-  SEO_NOINDEX_PATH_PREFIXES:
-    process.env.NEXT_PUBLIC_SEO_NOINDEX_PATH_PREFIXES ||
-    '/search,/auth,/dashboard,/sign-in,/sign-up',
 
   // RSS订阅
   ENABLE_RSS: process.env.NEXT_PUBLIC_ENABLE_RSS || 'true', // 是否开启RSS订阅功能

@@ -64,11 +64,6 @@ const SEO = props => {
     'self',
     NOTION_CONFIG
   )
-  const noindexPrefixes = siteConfig(
-    'SEO_NOINDEX_PATH_PREFIXES',
-    '',
-    NOTION_CONFIG
-  )
   const mainBlogLink = siteConfig('MAIN_BLOG_LINK', null, NOTION_CONFIG)
   const secondaryBlogLink = siteConfig(
     'SECONDARY_BLOG_LINK',
@@ -116,15 +111,8 @@ const SEO = props => {
 
   const AUTHOR = siteConfig('AUTHOR')
   const canonicalBase =
-    resolveCanonicalMode(post, canonicalMode) === 'main' && mainBlogLink
-      ? mainBlogLink
-      : LINK
+    canonicalMode === 'main' && mainBlogLink ? mainBlogLink : LINK
   const canonicalUrl = buildCanonicalUrl(canonicalBase, router.asPath)
-  const robotsContent = getRobotsContent({
-    noindexPrefixes,
-    post,
-    route: router.route
-  })
   const structuredData = buildStructuredData({
     AUTHOR,
     LINK,
@@ -145,7 +133,7 @@ const SEO = props => {
         name='viewport'
         content='width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0'
       />
-      <meta name='robots' content={robotsContent} />
+      <meta name='robots' content='follow, index' />
       <meta charSet='UTF-8' />
       {SEO_GOOGLE_SITE_VERIFICATION && (
         <meta
@@ -168,7 +156,7 @@ const SEO = props => {
       <meta property='og:locale' content={lang} />
       <meta property='og:image' content={meta?.image || siteConfig('HOME_BANNER_IMAGE')} />
       <meta property='og:type' content={meta?.type || 'website'} />
-      <meta property='og:url' content={canonicalUrl} />
+      <meta property='og:url' content={url} />
       <link rel='canonical' href={canonicalUrl} />
       <link rel='icon' href={BLOG_FAVICON} />
       <script
@@ -216,34 +204,6 @@ function buildCanonicalUrl(baseUrl, asPath = '/') {
   } catch (error) {
     return baseUrl
   }
-}
-
-function resolveCanonicalMode(post, fallbackMode) {
-  const extMode = post?.ext?.canonical_mode
-  if (extMode === 'main' || extMode === 'self') {
-    return extMode
-  }
-  return fallbackMode
-}
-
-function getRobotsContent({ noindexPrefixes, post, route }) {
-  const extNoindex = post?.ext?.noindex === true
-  if (extNoindex) {
-    return 'noindex,follow'
-  }
-
-  const prefixes = Array.isArray(noindexPrefixes)
-    ? noindexPrefixes
-    : String(noindexPrefixes || '')
-        .split(',')
-        .map(item => item.trim())
-        .filter(Boolean)
-
-  if (prefixes.some(prefix => route?.startsWith(prefix))) {
-    return 'noindex,follow'
-  }
-
-  return 'index,follow'
 }
 
 function buildStructuredData({
