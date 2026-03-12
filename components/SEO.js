@@ -59,17 +59,6 @@ const SEO = props => {
   const category = meta?.category || KEYWORDS // section 主要是像是 category 這樣的分類，Facebook 用這個來抓連結的分類
   const favicon = siteConfig('BLOG_FAVICON')
   const BACKGROUND_DARK = siteConfig('BACKGROUND_DARK', '', NOTION_CONFIG)
-  const canonicalMode = siteConfig(
-    'SEO_CANONICAL_MODE',
-    'self',
-    NOTION_CONFIG
-  )
-  const mainBlogLink = siteConfig('MAIN_BLOG_LINK', null, NOTION_CONFIG)
-  const secondaryBlogLink = siteConfig(
-    'SECONDARY_BLOG_LINK',
-    null,
-    NOTION_CONFIG
-  )
 
   const SEO_BAIDU_SITE_VERIFICATION = siteConfig(
     'SEO_BAIDU_SITE_VERIFICATION',
@@ -110,20 +99,6 @@ const SEO = props => {
   const FACEBOOK_PAGE = siteConfig('FACEBOOK_PAGE', null, NOTION_CONFIG)
 
   const AUTHOR = siteConfig('AUTHOR')
-  const canonicalBase =
-    canonicalMode === 'main' && mainBlogLink ? mainBlogLink : LINK
-  const canonicalUrl = buildCanonicalUrl(canonicalBase, router.asPath)
-  const structuredData = buildStructuredData({
-    AUTHOR,
-    LINK,
-    canonicalUrl,
-    description,
-    mainBlogLink,
-    meta,
-    secondaryBlogLink,
-    siteTitle: siteConfig('SITE_TITLE'),
-    url
-  })
   return (
     <Head>
       <link rel='icon' href={favicon} />
@@ -157,14 +132,9 @@ const SEO = props => {
       <meta property='og:image' content={meta?.image || siteConfig('HOME_BANNER_IMAGE')} />
       <meta property='og:type' content={meta?.type || 'website'} />
       <meta property='og:url' content={url} />
-      <link rel='canonical' href={canonicalUrl} />
+      <link rel='canonical' href={`https://raymondhouch.com${router.asPath}`} />
+      <meta name='robots' content='index,follow' />
       <link rel='icon' href={BLOG_FAVICON} />
-      <script
-        type='application/ld+json'
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData)
-        }}
-      />
 
       {COMMENT_WEBMENTION_ENABLE && (
         <>
@@ -196,61 +166,6 @@ const SEO = props => {
       {children}
     </Head>
   )
-}
-
-function buildCanonicalUrl(baseUrl, asPath = '/') {
-  try {
-    return new URL(asPath || '/', `${baseUrl}/`).toString()
-  } catch (error) {
-    return baseUrl
-  }
-}
-
-function buildStructuredData({
-  AUTHOR,
-  LINK,
-  canonicalUrl,
-  description,
-  mainBlogLink,
-  meta,
-  secondaryBlogLink,
-  siteTitle,
-  url
-}) {
-  const organization = {
-    '@type': 'Organization',
-    name: AUTHOR,
-    url: mainBlogLink || LINK,
-    sameAs: [mainBlogLink, secondaryBlogLink, LINK].filter(Boolean)
-  }
-
-  if (meta?.type === 'Post') {
-    return {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: meta?.title || siteTitle,
-      description,
-      image: meta?.image,
-      url: canonicalUrl,
-      mainEntityOfPage: canonicalUrl,
-      datePublished: meta?.publishDay,
-      author: {
-        '@type': 'Person',
-        name: AUTHOR,
-        url: mainBlogLink || LINK
-      },
-      publisher: organization
-    }
-  }
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: siteTitle,
-    description,
-    url: canonicalUrl || url || LINK,
-    publisher: organization
-  }
 }
 
 /**

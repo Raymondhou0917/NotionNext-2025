@@ -1,7 +1,6 @@
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
 import { getGlobalData } from '@/lib/db/getSiteData'
-import { getPublishedRoutablePosts } from '@/lib/utils/post'
 import { DynamicLayout } from '@/themes/theme'
 
 /**
@@ -19,7 +18,9 @@ export async function getStaticProps({ params: { category }, locale }) {
   let props = await getGlobalData({ from, locale })
 
   // 过滤状态
-  props.posts = getPublishedRoutablePosts(props.allPages)
+  props.posts = props.allPages?.filter(
+    page => page.type === 'Post' && page.status === 'Published'
+  )
   // 处理过滤
   props.posts = props.posts.filter(
     post => post && post.category && post.category.includes(category)

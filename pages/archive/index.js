@@ -3,7 +3,6 @@ import { siteConfig } from '@/lib/config'
 import { getGlobalData } from '@/lib/db/getSiteData'
 import { isBrowser } from '@/lib/utils'
 import { formatDateFmt } from '@/lib/utils/formatDate'
-import { getPublishedRoutablePosts } from '@/lib/utils/post'
 import { DynamicLayout } from '@/themes/theme'
 import { useEffect } from 'react'
 
@@ -34,7 +33,9 @@ const ArchiveIndex = props => {
 export async function getStaticProps({ locale }) {
   const props = await getGlobalData({ from: 'archive-index', locale })
   // 处理分页
-  props.posts = getPublishedRoutablePosts(props.allPages)
+  props.posts = props.allPages?.filter(
+    page => page.type === 'Post' && page.status === 'Published'
+  )
   delete props.allPages
 
   const postsSortByDate = Object.create(props.posts)

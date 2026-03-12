@@ -1,7 +1,6 @@
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
 import { getGlobalData } from '@/lib/db/getSiteData'
-import { getPublishedRoutablePosts } from '@/lib/utils/post'
 import { DynamicLayout } from '@/themes/theme'
 
 const Tag = props => {
@@ -13,9 +12,9 @@ export async function getStaticProps({ params: { tag, page }, locale }) {
   const from = 'tag-page-props'
   const props = await getGlobalData({ from, locale })
   // 过滤状态、标签
-  props.posts = getPublishedRoutablePosts(props.allPages).filter(
-    post => post && post?.tags && post?.tags.includes(tag)
-  )
+  props.posts = props.allPages
+    ?.filter(page => page.type === 'Post' && page.status === 'Published')
+    .filter(post => post && post?.tags && post?.tags.includes(tag))
   // 处理文章数
   props.postCount = props.posts.length
   const POSTS_PER_PAGE = siteConfig('POSTS_PER_PAGE', 12, props?.NOTION_CONFIG)
@@ -46,9 +45,9 @@ export async function getStaticPaths() {
   const paths = []
   tagOptions?.forEach(tag => {
     // 过滤状态类型
-    const tagPosts = getPublishedRoutablePosts(allPages).filter(
-      post => post && post?.tags && post?.tags.includes(tag.name)
-    )
+    const tagPosts = allPages
+      ?.filter(page => page.type === 'Post' && page.status === 'Published')
+      .filter(post => post && post?.tags && post?.tags.includes(tag.name))
     // 处理文章页数
     const postCount = tagPosts.length
     const totalPages = Math.ceil(
